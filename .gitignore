@@ -11,8 +11,10 @@ ENV/
 *.out
 *.err
 
-data/
 data/*
+!data/
+!data/.gitignore
+
 
 *.ckpt
 *.pth
