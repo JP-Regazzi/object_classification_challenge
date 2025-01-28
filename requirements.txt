@@ -1,1 +1,8 @@
 rembg
+torch
+numpy==1.26.4
+torchvision
+scikit-learn
+matplotlib
+pandas
+clip
