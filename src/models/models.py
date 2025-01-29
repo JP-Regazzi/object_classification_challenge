@@ -1,5 +1,6 @@
 import torch
 import torchvision.models as models
+from transformers import CLIPProcessor, CLIPModel
 
 def load_models():
     """
@@ -16,3 +17,19 @@ def load_models():
     inception_layer = inception_model._modules.get('avgpool')
 
     return resnet_model, vgg_model, inception_model, resnet_layer, vgg_layer, inception_layer
+
+
+def load_clip_model(model_name="patrickjohncyh/fashion-clip"):
+    """
+    Load the CLIP model and processor.
+    
+    Parameters:
+        model_name (str): Name of the pre-trained model.
+
+    Returns:
+        model (CLIPModel): Pre-trained CLIP model.
+        processor (CLIPProcessor): Processor for the model.
+    """
+    processor = CLIPProcessor.from_pretrained(model_name)
+    model = CLIPModel.from_pretrained(model_name)
+    return model, processor

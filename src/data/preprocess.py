@@ -1,4 +1,6 @@
 import torchvision.transforms as transforms
+import os
+from PIL import Image
 
 def get_transforms():
     """
@@ -20,3 +22,31 @@ def get_transforms():
     ])
 
     return transform_224, transform_299
+
+
+def load_image_paths(folder_path):
+    """
+    Load all image paths from a folder.
+
+    Parameters:
+        folder_path (str): Path to the folder containing images.
+
+    Returns:
+        list: List of image file paths.
+    """
+    return [os.path.join(folder_path, img) for img in os.listdir(folder_path)]
+
+def preprocess_image(image_path, processor):
+    """
+    Preprocess an image for the CLIP model.
+
+    Parameters:
+        image_path (str): Path to the image file.
+        processor (CLIPProcessor): Processor for the CLIP model.
+
+    Returns:
+        torch.Tensor: Preprocessed image tensor.
+    """
+    image = Image.open(image_path).convert("RGB")
+    inputs = processor(images=image, return_tensors="pt", padding=True)
+    return inputs

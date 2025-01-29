@@ -1,5 +1,7 @@
 import torch
 from PIL import Image
+from tqdm import tqdm
+from preprocess import preprocess_image
 
 def extract_hybrid_embeddings(image_path, resnet_model, vgg_model, inception_model, resnet_layer, vgg_layer, inception_layer, transform_224, transform_299):
     """
@@ -35,3 +37,25 @@ def extract_hybrid_embeddings(image_path, resnet_model, vgg_model, inception_mod
     handle_in.remove()
 
     return torch.cat([resnet_emb, vgg_emb, inception_emb])
+
+
+def generate_embeddings(image_paths, model, processor):
+    """
+    Generate embeddings for a list of images using the CLIP model.
+
+    Parameters:
+        image_paths (list): List of image file paths.
+        model (CLIPModel): Pre-trained CLIP model.
+        processor (CLIPProcessor): Processor for the CLIP model.
+
+    Returns:
+        list: List of normalized embeddings.
+    """
+    features = []
+    for img_path in tqdm(image_paths):
+        inputs = preprocess_image(img_path, processor)
+        with torch.no_grad():
+            embedding = model.get_image_features(**inputs)
+            embedding = embedding / embedding.norm(p=2, dim=-1)
+            features.append(embedding.flatten())
+    return features

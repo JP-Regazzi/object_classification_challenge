@@ -1,4 +1,5 @@
 import numpy as np
+import torch
 from sklearn.metrics.pairwise import cosine_similarity
 import cv2
 import matplotlib.pyplot as plt
@@ -53,3 +54,40 @@ def match_with_metrics(imagesA, imagesB, embeddingsA, embeddingsB):
         best_matches_with_metrics.append((b_idx, max_idx, max_score, mse, mae))
 
     return best_matches_with_metrics
+
+def compute_similarity(client_embeddings, reference_embeddings):
+    """
+    Compute cosine similarity between client and reference embeddings.
+
+    Parameters:
+        client_embeddings (torch.Tensor): Tensor of client embeddings.
+        reference_embeddings (torch.Tensor): Tensor of reference embeddings.
+
+    Returns:
+        torch.Tensor: Matrix of cosine similarities.
+    """
+    return torch.mm(client_embeddings, reference_embeddings.t())
+
+def calculate_accuracy(answers, guesses):
+    """
+    Calculate accuracy based on provided answers and guesses.
+
+    Parameters:
+        answers (dict): Ground-truth answers.
+        guesses (dict): Predicted guesses.
+
+    Returns:
+        float: Accuracy percentage.
+    """
+    accuracy = 0
+    nb_guess = 0
+    for answer_key in answers.keys():
+        found = 0
+        if answer_key in guesses.keys():
+            nb_guess += 1
+            for value_guess in guesses[answer_key]:
+                for value_answ in answers[answer_key]:
+                    if value_answ in value_guess and not found:
+                        accuracy += 1
+                        found = 1
+    return accuracy / nb_guess * 100
