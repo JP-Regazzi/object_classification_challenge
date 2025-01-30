@@ -48,20 +48,15 @@ The final pipeline integrates the **FashionCLIP model** to extract embeddings th
 3. Rank test images based on similarity and retrieve the top 10 closest matches for each test image.
 4. Evaluate performance using the established metrics.
 
+![Pipeline](Assets/pipeline.png)
+
 ## Results
-to complete
+
+![Results](Assets/results.png)
+
+![Improvements](Assets/improvement.png)
 
 ## Usage
-### Requirements
-- Python 3.9+
-- Required Python Libraries:
-  - `torch`
-  - `transformers`
-  - `Pillow`
-  - `pandas`
-  - `numpy`
-  - `matplotlib`
-  - `tq
 
 ### Steps to Run
 1. **Preprocessing**:
